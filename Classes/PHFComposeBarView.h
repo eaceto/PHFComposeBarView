@@ -5,6 +5,7 @@
 // -initWithFrame:.
 extern CGFloat const PHFComposeBarViewInitialHeight;
 
+extern CGFloat const PHFComposeBarFontSize;
 
 // Each notification includes the view as object and a userInfo dictionary
 // containing the beginning and ending view frame. Animation key/value pairs are
@@ -57,6 +58,9 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 // Default is 9. Merely a conversion from maxHeight property.
 @property (assign, nonatomic) CGFloat maxLinesCount;
 
+// Default is NO.
+@property (assign, nonatomic) BOOL allowsMultipleImages;
+
 // Default is nil. This is a shortcut for the text property of placeholderLabel.
 @property (strong, nonatomic) NSString *placeholder UI_APPEARANCE_SELECTOR;
 
@@ -65,6 +69,10 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 // Default is nil. This is a shortcut for the text property of textView. Setting
 // the text can be animated by using the -setText:animated: method.
 @property (strong, nonatomic) NSString *text;
+
+// Default is nil. This is a shortcut for the attributedText property of textView. Setting
+// the text can be animated by using the -setAttributedText:animated: method.
+@property (strong, nonatomic) NSAttributedString *attributedText;
 
 @property (strong, nonatomic, readonly) UITextView *textView;
 
@@ -76,6 +84,10 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 @property (strong, nonatomic) UIImage *utilityButtonImage UI_APPEARANCE_SELECTOR;
 
 - (void)setText:(NSString *)text animated:(BOOL)animated;
+- (void)setAttributedText:(NSAttributedString *)text animated:(BOOL)animated;
+
+- (void)appendImage:(UIImage*)image;
+- (NSArray*)attachedImages;
 
 @end
 

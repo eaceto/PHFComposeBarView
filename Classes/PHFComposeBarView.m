@@ -39,6 +39,7 @@ CGFloat const kUtilityButtonBottomMargin  =  9.0f;
 CGFloat const kCaretYOffset               =  7.0f;
 CGFloat const kCharCountFontSize          = 11.0f;
 CGFloat const kCharCountTopMargin         = 15.0f;
+CGFloat const kJPEGCompressionQuality     = 0.9;
 
 
 UIViewAnimationCurve const kResizeAnimationCurve = UIViewAnimationCurveEaseInOut;
@@ -128,6 +129,9 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidChange:(UITextView *)textView {
+    //After using attributedText the textView resets the fontSize
+    //so we reset the fontSize here.
+    [textView setFont:[UIFont systemFontOfSize:kFontSize]];
     [self handleTextViewChangeAnimated:NO];
 }
 
@@ -236,6 +240,14 @@ static CGFloat kTextViewToSuperviewHeightDelta;
     [self setText:text animated:YES];
 }
 
+- (NSAttributedString *)attributedText {
+    return [[self textView] attributedText];
+}
+
+- (void)setAttributedText:(NSAttributedString *)text {
+    [self setAttributedText:text animated:YES];
+}
+
 - (UIImage *)utilityButtonImage {
     return [[self utilityButton] imageForState:UIControlStateNormal];
 }
@@ -250,6 +262,112 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 - (void)setText:(NSString *)text animated:(BOOL)animated {
     [[self textView] setText:text];
     [self handleTextViewChangeAnimated:animated];
+}
+
+- (void)setAttributedText:(NSAttributedString *)text animated:(BOOL)animated {
+    [[self textView] setAttributedText:text];
+    [self handleTextViewChangeAnimated:animated];
+}
+
+
+- (UIImage*)attachmentImageWithImage:(UIImage*)image {
+    
+    NSParameterAssert(image.size.width > 0.0 && image.size.height > 0.0);
+    
+    const CGFloat maxImageWidth = CGRectGetWidth(self.textView.frame)*0.9;
+    const CGFloat maxImageHeight = self.maxHeight*0.9; //TODO: Figure out if messages has an imageHeight
+    
+    CGFloat widthScaleFactor = maxImageWidth / image.size.width;
+    CGFloat heightScaleFactor = maxImageHeight / image.size.height;
+    CGFloat scaleFactor = MIN(widthScaleFactor, heightScaleFactor);
+
+    CGRect frame = CGRectMake(0, 0, image.size.width*scaleFactor, image.size.height*scaleFactor);
+    UIGraphicsBeginImageContextWithOptions(frame.size, NO, [[UIScreen mainScreen] scale]);
+
+    UIBezierPath *imagePath = [UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:5.0];
+    [imagePath addClip];
+    
+    [image drawInRect:frame];
+    UIImage *attachmentImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    assert(attachmentImage != nil);
+    
+    return attachmentImage;
+}
+
+
+- (NSTextAttachment*)textAttachmentWithImage:(UIImage*)image {
+    
+    //IDEA: instead of creating a imageData we could save the image and use the data to be a pointer to that image.
+    NSData *imageData = UIImageJPEGRepresentation(image, kJPEGCompressionQuality);
+    NSTextAttachment *textAttachment = [[NSTextAttachment alloc] initWithData:imageData ofType:@"jpg"];
+    textAttachment.image = [self attachmentImageWithImage:image];
+    
+    return textAttachment;
+}
+
+- (void)appendImage:(UIImage *)image {
+    
+    NSTextAttachment *textAttachment = [self textAttachmentWithImage:image];
+    NSAttributedString *imageAttributedString = [NSAttributedString attributedStringWithAttachment:textAttachment];
+    
+    UIFont *defaultFont = [UIFont systemFontOfSize:kFontSize];
+    NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                defaultFont, NSFontAttributeName,
+                                nil];
+    
+    NSMutableAttributedString *text = nil;
+    if(self.attributedText != nil && self.allowsMultipleImages) {
+        text = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+    } else if(self.text != nil) {
+        text = [[NSMutableAttributedString alloc] initWithString:[self.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                                                      attributes:attributes];
+    } else {
+        text = [[NSMutableAttributedString alloc] initWithString:@""
+                                               attributes:attributes];
+    }
+    
+    if(text.length > 0) {
+        [text appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"
+                                                                     attributes:attributes]]; // TODO: Does messages do this?
+    }
+    
+    [text appendAttributedString:imageAttributedString];
+    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"
+                                                                 attributes:attributes]]; // TODO: Does messages do this?
+    
+    [self setAttributedText:text];
+
+}
+
+- (NSArray*)attachedImages {
+    
+    NSMutableArray *attachedImages = [NSMutableArray array];
+    if(self.attributedText == nil) {
+        return attachedImages;
+    } //else
+    
+    NSRange range = NSMakeRange(0, [self.attributedText length]);
+    if (range.length > 0) {
+        NSUInteger index = 0;
+        do {
+            NSRange effectiveRange;
+            NSDictionary *attributes = [self.attributedText attributesAtIndex:index longestEffectiveRange:&effectiveRange inRange:range];
+        
+            NSTextAttachment *attachment = [attributes objectForKey:NSAttachmentAttributeName];
+            if(attachment != nil) {
+                UIImage *attachedImage = [UIImage imageWithData:attachment.contents];
+                if(attachedImage != nil) {
+                    [attachedImages addObject:attachedImage]; //assumes that only images are attached
+                }
+            }
+            index = effectiveRange.location + effectiveRange.length;
+        } while (index < range.length);
+    }
+    
+    return attachedImages;
 }
 
 #pragma mark - Internal Properties
@@ -607,6 +725,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
     _autoAdjustTopOffset = YES;
     _enabled = YES;
     _maxHeight = 200.0f;
+    _allowsMultipleImages = NO;
 
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin];
 
@@ -643,7 +762,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 
     if (!isHidden) {
         NSInteger count = [[[[self textView] text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length];
-        NSString *text = [NSString stringWithFormat:@"%d/%d", count, [self maxCharCount]];
+        NSString *text = [NSString stringWithFormat:@"%ld/%lu", (long)count, (unsigned long)[self maxCharCount]];
         [[self charCountLabel] setText:text];
     }
 }
