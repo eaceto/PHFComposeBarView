@@ -60,6 +60,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 @property (strong, nonatomic) PHFDelegateChain *delegateChain;
 @property (strong, nonatomic, readonly) UIButton *textContainer;
 @property (assign, nonatomic) CGFloat previousTextHeight;
+
 @end
 
 
@@ -204,6 +205,13 @@ static CGFloat kTextViewToSuperviewHeightDelta;
         _maxCharCount = count;
         [self updateCharCountLabel];
     }
+}
+
+@synthesize minHeight = _minHeight;
+- (void)setMinHeight:(CGFloat)minHeight {
+    _minHeight = minHeight;
+    [self resizeTextViewIfNeededAnimated:NO];
+    [self scrollToCaretIfNeeded];
 }
 
 @synthesize maxHeight = _maxHeight;
@@ -722,6 +730,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 }
 
 - (void)setup {
+    _minHeight= 0.0;
     _autoAdjustTopOffset = YES;
     _enabled = YES;
     _maxHeight = 200.0f;
@@ -748,6 +757,8 @@ static CGFloat kTextViewToSuperviewHeightDelta;
     UITextView *textView = [self textView];
     CGFloat height = [textView sizeThatFits:CGSizeMake([textView frame].size.width, FLT_MAX)].height;
 
+    height = MAX(_minHeight, height);
+    
     return ceilf(height);
 }
 

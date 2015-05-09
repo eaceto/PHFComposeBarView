@@ -55,6 +55,9 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 // Default is 200.0.
 @property (assign, nonatomic) CGFloat maxHeight;
 
+// Default is 0.0
+@property (assign, nonatomic) CGFloat minHeight;
+
 // Default is 9. Merely a conversion from maxHeight property.
 @property (assign, nonatomic) CGFloat maxLinesCount;
 
