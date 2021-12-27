@@ -1,9 +1,8 @@
 #import <QuartzCore/QuartzCore.h>
-#import <PHFDelegateChain/PHFDelegateChain.h>
+#import "PHFDelegateChain.h"
 #import "PHFComposeBarView.h"
 #import "PHFComposeBarView_TextView.h"
 #import "PHFComposeBarView_Button.h"
-
 
 CGFloat const PHFComposeBarViewInitialHeight = 44.0f;
 

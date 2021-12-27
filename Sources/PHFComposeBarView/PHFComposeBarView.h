@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 
-
 // Height of the view when text view is empty. Ideally, you should use this in
 // -initWithFrame:.
 extern CGFloat const PHFComposeBarViewInitialHeight;

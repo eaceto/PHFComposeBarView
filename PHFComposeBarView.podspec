@@ -14,9 +14,9 @@ be customized.
                      DESC
   s.homepage       = 'https://github.com/fphilipe/PHFComposeBarView'
   s.license        = { :type => 'MIT', :file => 'LICENSE' }
-  s.author         = { 'Philipe Fatio' => 'me@phili.pe' }
-  s.source         = { :git => 'https://github.com/fphilipe/PHFComposeBarView.git', :tag => 'v2.0.1' }
-  s.source_files   = 'Classes/*'
+  s.author         = { 'Philipe Fatio' => 'me@phili.pe', 'Ezequiel Aceto' => 'ezequiel.aceto@gmail.com' }
+  s.source         = { :git => 'https://github.com/eaceto/PHFComposeBarView.git', :tag => 'v2.0.1' }
+  s.source_files   = 'Sources/*'
   s.preserve_paths = 'LICENSE', 'README.md'
   s.requires_arc   = true
   s.platform       = :ios
@@ -27,5 +27,5 @@ https://raw.github.com/fphilipe/PHFComposeBarView/v2.0.0/Screenshots/empty.png
 https://raw.github.com/fphilipe/PHFComposeBarView/v2.0.0/Screenshots/text.png
                      ]
 
-  s.dependency 'PHFDelegateChain', '~> 1.0'
+# Built in  s.dependency 'PHFDelegateChain', '~> 1.0'
 end
