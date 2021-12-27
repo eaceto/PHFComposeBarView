@@ -97,7 +97,9 @@ CGRect const kInitialViewFrame = { 0.0f, 0.0f, 320.0f, 480.0f };
 }
 
 - (void)composeBarViewDidPressUtilityButton:(PHFComposeBarView *)composeBarView {
-    [self prependTextToTextView:@"Utility button pressed"];
+
+    UIImage *sampleImage = [UIImage imageNamed:@"sample-image.jpg"];
+    [composeBarView appendImage:sampleImage];
 }
 
 - (void)composeBarView:(PHFComposeBarView *)composeBarView
@@ -106,7 +108,7 @@ CGRect const kInitialViewFrame = { 0.0f, 0.0f, 320.0f, 480.0f };
               duration:(NSTimeInterval)duration
         animationCurve:(UIViewAnimationCurve)animationCurve
 {
-    [self prependTextToTextView:[NSString stringWithFormat:@"Height changing by %d", (NSInteger)(endFrame.size.height - startFrame.size.height)]];
+    [self prependTextToTextView:[NSString stringWithFormat:@"Height changing by %ld", (long)(endFrame.size.height - startFrame.size.height)]];
     UIEdgeInsets insets = UIEdgeInsetsMake(0.0f, 0.0f, endFrame.size.height, 0.0f);
     UITextView *textView = [self textView];
     [textView setContentInset:insets];
@@ -143,8 +145,9 @@ CGRect const kInitialViewFrame = { 0.0f, 0.0f, 320.0f, 480.0f };
                                   kInitialViewFrame.size.width,
                                   PHFComposeBarViewInitialHeight);
         _composeBarView = [[PHFComposeBarView alloc] initWithFrame:frame];
-        [_composeBarView setMaxCharCount:160];
-        [_composeBarView setMaxLinesCount:5];
+// TODO: Test Attributed Text with MaxCharCount and MaxLinesCount
+//      [_composeBarView setMaxCharCount:160];
+//      [_composeBarView setMaxLinesCount:5];
         [_composeBarView setPlaceholder:@"Type something..."];
         [_composeBarView setUtilityButtonImage:[UIImage imageNamed:@"Camera"]];
         [_composeBarView setDelegate:self];

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A03A7AAB683D47D3AFC23C4E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB073D9A9EB54B939F2B9BB9 /* libPods.a */; };
+		B69838491AEAD045000D9674 /* sample-image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B69838481AEAD045000D9674 /* sample-image.jpg */; };
 		D51C5F8B172D322D0046E65C /* PHFComposeBarView_TextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C5F7D172D322D0046E65C /* PHFComposeBarView_TextView.m */; };
 		D51C5F8C172D322D0046E65C /* PHFComposeBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C5F7F172D322D0046E65C /* PHFComposeBarView.m */; };
 		D51C5F9F172D3F880046E65C /* Camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51C5F9D172D3F880046E65C /* Camera@2x.png */; };
@@ -25,7 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		05497BC133F44135B66E6136 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		176AE4128BA0821D4CFBD1D6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		5D8D4DEF8A6C635850F0D2D7 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B69838481AEAD045000D9674 /* sample-image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "sample-image.jpg"; sourceTree = "<group>"; };
 		D51C5F7C172D322D0046E65C /* PHFComposeBarView_TextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHFComposeBarView_TextView.h; sourceTree = "<group>"; };
 		D51C5F7D172D322D0046E65C /* PHFComposeBarView_TextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHFComposeBarView_TextView.m; sourceTree = "<group>"; };
 		D51C5F7E172D322D0046E65C /* PHFComposeBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHFComposeBarView.h; sourceTree = "<group>"; };
@@ -66,6 +69,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86BB6254090339FBF5EA9959 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				176AE4128BA0821D4CFBD1D6 /* Pods.debug.xcconfig */,
+				5D8D4DEF8A6C635850F0D2D7 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D51C5F7B172D322D0046E65C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,7 +116,7 @@
 				D5365C2A172D1F7F0059FF04 /* PHFComposeBarViewExample */,
 				D5365C23172D1F7F0059FF04 /* Frameworks */,
 				D5365C22172D1F7F0059FF04 /* Products */,
-				05497BC133F44135B66E6136 /* Pods.xcconfig */,
+				86BB6254090339FBF5EA9959 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +142,7 @@
 		D5365C2A172D1F7F0059FF04 /* PHFComposeBarViewExample */ = {
 			isa = PBXGroup;
 			children = (
+				B69838481AEAD045000D9674 /* sample-image.jpg */,
 				D51C5F9D172D3F880046E65C /* Camera@2x.png */,
 				D5365C33172D1F7F0059FF04 /* AppDelegate.h */,
 				D5365C34172D1F7F0059FF04 /* AppDelegate.m */,
@@ -212,6 +225,7 @@
 				D5365C39172D1F7F0059FF04 /* Default@2x.png in Resources */,
 				D5365C3B172D1F7F0059FF04 /* Default-568h@2x.png in Resources */,
 				D51C5F9F172D3F880046E65C /* Camera@2x.png in Resources */,
+				B69838491AEAD045000D9674 /* sample-image.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 		};
 		9DC4DCA1CA2543C390469FAB /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -334,7 +348,7 @@
 		};
 		D5365C45172D1F7F0059FF04 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05497BC133F44135B66E6136 /* Pods.xcconfig */;
+			baseConfigurationReference = 176AE4128BA0821D4CFBD1D6 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PHFComposeBarViewExample/PHFComposeBarViewExample-Prefix.pch";
@@ -346,7 +360,7 @@
 		};
 		D5365C46172D1F7F0059FF04 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05497BC133F44135B66E6136 /* Pods.xcconfig */;
+			baseConfigurationReference = 5D8D4DEF8A6C635850F0D2D7 /* Pods.release.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PHFComposeBarViewExample/PHFComposeBarViewExample-Prefix.pch";
